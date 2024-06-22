@@ -1,12 +1,105 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
+    <title>Dynamic List Example</title>
 </head>
+
 <body>
+    <div id="tableContainer">
+        <table id="dataTable">
+            <thead>
+                <tr>
+                    <th style="display: none;">likelist_sn</th>
+                    <th>total_amount</th>
+                    <th>total_fee</th>
+                    <th>product_name</th>
+                    <th style="display: none;">product_no</th>
+                    <th>account</th>
+                    <th>email</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Table rows will be inserted here -->
+            </tbody>
+        </table>
+        <button id="add" onclick="addRow(this)"> Add New </button>
+        <button id="confirm" onclick="confirm(this)" style="display: none"> confirm </button>
+        <button id="cancle" onclick="cancle(this)" style="display: none"> cancle </button>
 
-Hello world
+    </div>
 
+    <script>
+        window.onload = function () {
+            var xhr = new XMLHttpRequest();
+            var url = 'http://localhost:8081/esuninterview/likelist/query?id=1';
+
+            xhr.open('GET', url, true);
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    let jsonData = JSON.parse(xhr.responseText);
+                    console.log(jsonData);
+
+                    const tableBody = document.querySelector("#dataTable tbody");
+                    makeTable(jsonData);
+                }
+            }
+            xhr.send();
+        }
+
+        const tableBody = document.querySelector("#dataTable tbody");
+        function makeTable(jsonData) {
+            for (const key in jsonData) {
+                if (jsonData.hasOwnProperty(key)) {
+                    const item = jsonData[key];
+                    const row = document.createElement("tr");
+                    row.innerHTML = `
+                    <td id="${item.likelist_sn}_likelist_sn" style="display: none">${item.likelist_sn}</td>
+                    <td id="${item.likelist_sn}_total_amount">${item.total_amount}</td>
+                    <td id="${item.likelist_sn}_total_fee">${item.total_fee}</td>
+                    <td id="${item.likelist_sn}_product_name">${item.product_name}</td>
+                    <td id="${item.likelist_sn}_product_no" style="display: none;">${item.product_no}</td>
+                    <td id="${item.likelist_sn}_account">${item.account}</td>
+                    <td id="${item.likelist_sn}_email">${item.email}</td>
+                    <button id="${item.likelist_sn}_modify_button" onclick="modify(${item.likelist_sn})"> Add New </button>
+                `;
+                    tableBody.appendChild(row);
+                }
+            }
+        }
+
+        function confirm() {
+
+        }
+
+        function cancle() {
+            reloadPage();
+        }
+
+        function reloadPage() {
+            location.reload();
+        }
+
+        function addRow(button) {
+            const newRow = document.createElement("tr");
+            newRow.innerHTML = `
+                <td><input type="text" name="likelist_sn" style="display: none></td>
+                <td><input type="text" name="total_amount"></td>
+                <td><input type="text" name="total_fee"></td>
+                <td><input type="text" name="product_name"></td>
+                <td><input type="text" name="product_no" style="display: none></td>
+                <td><input type="text" name="account" disabled></td>
+                <td><input type="text" name="email"></td>
+                 `;
+            tableBody.appendChild(newRow);
+            button.style.display = "none";
+            let cancle_button = document.getElementById("cancle");
+            cancle_button.style.display = "";
+            let confirm_button = document.getElementById("confirm");
+            confirm_button.style.display = "";
+        }
+    </script>
 </body>
+
 </html>

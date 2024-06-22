@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Dynamic List Example</title>
+</head>
+
+<body>
+    <ul id="dynamic-list"></ul>
+
+    <script>
+        window.onload = function () {
+            // 創建 XMLHttpRequest 物件
+            var xhr = new XMLHttpRequest();
+            // 定義要發送請求的 URL
+            var url = 'http://localhost:8081/esuninterview/likelist/query?id=1';
+
+            // 設定請求方法和 URL
+            xhr.open('GET', url, true);
+
+            // 設定回應處理函數
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    // 解析 JSON 回應
+                    var data = JSON.parse(xhr.responseText);
+
+                    console.log(data);
+                    // 假設返回的 data 是一個包含多個項目的陣列
+                    data.forEach(item => {
+                        var li = document.createElement('li'); // 創建 <li> 元素
+                        li.textContent = item.name; // 假設每個項目有一個 'name' 屬性
+                        ul.appendChild(li); // 將 <li> 添加到 <ul>
+                    });
+                }
+            };
+
+            // 發送請求
+            xhr.send();
+        };
+
+    </script>
+</body>
+
+</html>

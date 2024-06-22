@@ -62,7 +62,7 @@ public class LikeListService {
 
 	public String showUsersLikeList(Integer userId) {
 		Gson gson = new Gson();
-		Map<String, String> jsonMap = new HashMap<String, String>();
+		Map<String, Map<String, String>> jsonMap = new HashMap<String, Map<String, String>>();
 
 		Users user = usersDao.getById(userId);
 		String account = user.getAccount();
@@ -79,7 +79,7 @@ public class LikeListService {
 			tempMap.put("likelist_sn", likeList.getSn().toString());
 			tempMap.put("product_no", product.getNo().toString());
 
-			jsonMap.put(likeList.getSn().toString(), gson.toJson(tempMap));
+			jsonMap.put(likeList.getSn().toString(),tempMap);
 		}
 		return gson.toJson(jsonMap);
 	}
